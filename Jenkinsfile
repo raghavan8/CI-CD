@@ -5,11 +5,14 @@ pipeline {
         stage('Build and Push Docker Images') {
             steps {
                 script {
-                    docker.build('myapp', '-f app/Dockerfile .')
-                    docker.build('mypostgres', '-f db/Dockerfile .')
-                    docker.withRegistry('https://registry.example.com', 'docker-credentials') {
-                        docker.image('myapp').push()
-                        docker.image('mypostgres').push()
+                    // Build Docker images
+                    docker.build('raghavanp08/myapp', '-f app/Dockerfile .')
+                    docker.build('raghavanp08/mypostgres', '-f db/Dockerfile .')
+
+                    // Push Docker images to Docker Hub
+                    docker.withRegistry('https://registry.hub.docker.com', 'my-dockerhub-credentials') {
+                        docker.image('raghavanp08/myapp').push()
+                        docker.image('raghavanp08/mypostgres').push()
                     }
                 }
             }
@@ -18,6 +21,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
             steps {
                 script {
+                    // Assuming your Kubernetes manifest file is named kubernetes-manifest.yml
                     sh 'kubectl apply -f kubernetes-manifest.yml'
                 }
             }
