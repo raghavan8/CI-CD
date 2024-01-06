@@ -10,7 +10,7 @@ pipeline {
                     docker.build('raghavanp08/mypostgres', '-f db/Dockerfile .')
 
                     // Push Docker images to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'my-dockerhub-credentials') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'raghavanp08') {
                         docker.image('raghavanp08/myapp').push()
                         docker.image('raghavanp08/mypostgres').push()
                     }
